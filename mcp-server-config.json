@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "siraj-computational-hermeneutics": {
+      "command": "npx",
+      "args": ["@siraj-team/mcp-server-computational-hermeneutics"],
+      "env": {
+        "SIRAJ_DEBUG_MODE": "false"
+      }
+    }
+  }
+}

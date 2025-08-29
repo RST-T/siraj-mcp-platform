@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "siraj-computational-hermeneutics": {
+      "command": "python",
+      "args": [
+        "C:/Users/Admin/Documents/RST/Siraj-MCP/src/server/main_mcp_server.py"
+      ],
+      "env": {
+        "PYTHONPATH": "C:/Users/Admin/Documents/RST/Siraj-MCP"
+      }
+    }
+  }
+}

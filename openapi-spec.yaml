@@ -1,0 +1,918 @@
+openapi: 3.0.3
+info:
+  title: SIRAJ v6.1 Computational Hermeneutics MCP Server API
+  version: 6.1.0
+  description: |
+    ## Overview
+    
+    SIRAJ v6.1 Computational Hermeneutics MCP Server provides advanced linguistic analysis capabilities through the Model Context Protocol (MCP). This API enables deep semantic understanding of Arabic and Semitic languages with cultural sovereignty protection.
+    
+    ## Protocol
+    
+    This server implements the Model Context Protocol (MCP) specification using JSON-RPC 2.0 messages. The actual communication occurs over stdio or Server-Sent Events (SSE) transports, not traditional HTTP REST endpoints.
+    
+    ## Key Features
+    
+    - **72-Node Archetypal Semantic Mapping**: Deep semantic understanding through archetypal analysis
+    - **Cultural Sovereignty Protection**: Community-driven validation for sensitive content
+    - **Multi-Paradigm Validation**: Traditional, scientific, and computational approaches
+    - **Transformer Integration**: Support for multilingual BERT and Arabic-specific models
+    - **Real-time Processing**: Efficient caching and batch processing capabilities
+    
+    ## MCP Components
+    
+    This server provides:
+    - **Tools**: Executable functions for linguistic analysis
+    - **Resources**: Access to linguistic databases and corpora
+    - **Prompts**: Pre-built templates for common analysis workflows
+    
+    ## Transport Protocols
+    
+    - **stdio**: Default transport for Claude Desktop integration
+    - **sse**: Server-Sent Events transport for web applications
+    - **https**: Secure HTTPS transport with SSL/TLS encryption
+    
+    ## Authentication & Security
+    
+    - **SSL/TLS Encryption**: Secure HTTPS transport with configurable cipher suites
+    - **Certificate Validation**: Support for custom CA certificates and verification modes
+    - **Cultural Validation**: Built-in cultural sovereignty protection
+    - **Community Oversight**: Sacred content requires community validation
+    - **Local Processing**: All analysis performed locally, no external data transmission
+    
+  contact:
+    name: SIRAJ Team
+    url: https://github.com/siraj-team/siraj-mcp
+    email: siraj@linguistics.org
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: https://github.com/siraj-team/siraj-mcp/blob/main/LICENSE
+
+servers:
+  - url: stdio://siraj-mcp-server
+    description: Stdio transport (default for Claude Desktop)
+  - url: http://localhost:3001
+    description: SSE transport for web applications
+    variables:
+      port:
+        default: '3001'
+        description: Configurable port for SSE transport
+  - url: https://localhost:3443
+    description: HTTPS transport with SSL/TLS encryption
+    variables:
+      port:
+        default: '3443'
+        description: Configurable port for HTTPS transport
+
+tags:
+  - name: initialization
+    description: MCP initialization and capability negotiation
+  - name: tools
+    description: Executable functions for linguistic analysis
+  - name: resources
+    description: Access to linguistic databases and corpora
+  - name: prompts
+    description: Pre-built templates for analysis workflows
+  - name: logging
+    description: Server logging and debugging
+  - name: security
+    description: SSL/TLS configuration and security settings
+
+paths:
+  /initialize:
+    post:
+      tags: [initialization]
+      summary: Initialize MCP connection
+      description: |
+        Initialize the MCP connection and negotiate capabilities. This is the first message sent by the client to establish the connection.
+      operationId: initialize
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InitializeRequest'
+            example:
+              jsonrpc: "2.0"
+              id: 1
+              method: "initialize"
+              params:
+                protocolVersion: "2024-11-05"
+                capabilities:
+                  experimental: {}
+                  sampling: {}
+                clientInfo:
+                  name: "Claude Desktop"
+                  version: "1.0.0"
+      responses:
+        '200':
+          description: Initialization successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InitializeResponse'
+              example:
+                jsonrpc: "2.0"
+                id: 1
+                result:
+                  protocolVersion: "2024-11-05"
+                  capabilities:
+                    tools: {}
+                    resources:
+                      subscribe: true
+                      listChanged: true
+                    prompts:
+                      listChanged: true
+                    logging: {}
+                  serverInfo:
+                    name: "siraj-computational-hermeneutics"
+                    version: "6.1.0"
+                    description: "SIRAJ v6.1 Computational Hermeneutics MCP Server"
+
+  /tools/list:
+    post:
+      tags: [tools]
+      summary: List available tools
+      description: Get a list of all available linguistic analysis tools
+      operationId: listTools
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListToolsRequest'
+            example:
+              jsonrpc: "2.0"
+              id: 2
+              method: "tools/list"
+              params: {}
+      responses:
+        '200':
+          description: List of available tools
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListToolsResponse'
+              example:
+                jsonrpc: "2.0"
+                id: 2
+                result:
+                  tools:
+                    - name: "analyze_linguistic_root"
+                      description: "Deep analysis of Arabic and Semitic linguistic roots"
+                      inputSchema:
+                        type: "object"
+                        properties:
+                          root:
+                            type: "string"
+                            description: "The linguistic root to analyze"
+                          language_family:
+                            type: "string"
+                            enum: ["arabic", "hebrew", "aramaic"]
+                            description: "Target language family"
+                          cultural_context:
+                            type: "string"
+                            description: "Cultural context for analysis"
+                        required: ["root", "language_family"]
+
+  /tools/call:
+    post:
+      tags: [tools]
+      summary: Execute a tool
+      description: Execute a specific linguistic analysis tool with provided parameters
+      operationId: callTool
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CallToolRequest'
+            example:
+              jsonrpc: "2.0"
+              id: 3
+              method: "tools/call"
+              params:
+                name: "analyze_linguistic_root"
+                arguments:
+                  root: "ك-ت-ب"
+                  language_family: "arabic"
+                  cultural_context: "classical"
+      responses:
+        '200':
+          description: Tool execution result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CallToolResponse'
+              example:
+                jsonrpc: "2.0"
+                id: 3
+                result:
+                  content:
+                    - type: "text"
+                      text: "Root Analysis: ك-ت-ب (k-t-b)\n\nSemantic Core: Writing, Recording, Inscription\n\nArchetypal Mappings:\n1. Creation through inscription\n2. Divine recording\n3. Human documentation\n\nCultural Context: Classical Arabic\n- Quranic usage: 85 occurrences\n- Literary significance: High\n- Cultural sovereignty status: Protected"
+                  isError: false
+
+  /resources/list:
+    post:
+      tags: [resources]
+      summary: List available resources
+      description: Get a list of all available linguistic resources and databases
+      operationId: listResources
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListResourcesRequest'
+            example:
+              jsonrpc: "2.0"
+              id: 4
+              method: "resources/list"
+              params: {}
+      responses:
+        '200':
+          description: List of available resources
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListResourcesResponse'
+              example:
+                jsonrpc: "2.0"
+                id: 4
+                result:
+                  resources:
+                    - uri: "corpus://arabic-classical"
+                      name: "Classical Arabic Corpus"
+                      description: "Comprehensive collection of classical Arabic texts"
+                      mimeType: "application/json"
+                    - uri: "lexicon://semitic-roots"
+                      name: "Semitic Root Lexicon"
+                      description: "Database of Semitic linguistic roots"
+                      mimeType: "application/json"
+
+  /resources/read:
+    post:
+      tags: [resources]
+      summary: Read a resource
+      description: Read content from a specific linguistic resource
+      operationId: readResource
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReadResourceRequest'
+            example:
+              jsonrpc: "2.0"
+              id: 5
+              method: "resources/read"
+              params:
+                uri: "lexicon://semitic-roots/k-t-b"
+      responses:
+        '200':
+          description: Resource content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReadResourceResponse'
+              example:
+                jsonrpc: "2.0"
+                id: 5
+                result:
+                  contents:
+                    - uri: "lexicon://semitic-roots/k-t-b"
+                      mimeType: "application/json"
+                      text: |
+                        {
+                          "root": "ك-ت-ب",
+                          "transliteration": "k-t-b",
+                          "semantic_core": "writing, recording",
+                          "cognates": {
+                            "arabic": ["كتب", "كتاب", "مكتب"],
+                            "hebrew": ["כתב", "כתיבה"],
+                            "aramaic": ["כתב", "כתבא"]
+                          },
+                          "archetypal_nodes": [1, 15, 23, 42]
+                        }
+
+  /prompts/list:
+    post:
+      tags: [prompts]
+      summary: List available prompts
+      description: Get a list of all available analysis prompt templates
+      operationId: listPrompts
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ListPromptsRequest'
+            example:
+              jsonrpc: "2.0"
+              id: 6
+              method: "prompts/list"
+              params: {}
+      responses:
+        '200':
+          description: List of available prompts
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListPromptsResponse'
+              example:
+                jsonrpc: "2.0"
+                id: 6
+                result:
+                  prompts:
+                    - name: "analyze_root_detailed"
+                      description: "Detailed analysis of a linguistic root with cultural context"
+                      arguments:
+                        - name: "root"
+                          description: "The linguistic root to analyze"
+                          required: true
+                        - name: "cultural_context"
+                          description: "Cultural context for the analysis"
+                          required: false
+
+  /prompts/get:
+    post:
+      tags: [prompts]
+      summary: Get a specific prompt
+      description: Retrieve a specific prompt template with parameters
+      operationId: getPrompt
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GetPromptRequest'
+            example:
+              jsonrpc: "2.0"
+              id: 7
+              method: "prompts/get"
+              params:
+                name: "analyze_root_detailed"
+                arguments:
+                  root: "ك-ت-ب"
+                  cultural_context: "quranic"
+      responses:
+        '200':
+          description: Prompt template content
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetPromptResponse'
+              example:
+                jsonrpc: "2.0"
+                id: 7
+                result:
+                  description: "Detailed linguistic analysis template"
+                  messages:
+                    - role: "user"
+                      content:
+                        type: "text"
+                        text: "Analyze the Arabic root ك-ت-ب in Quranic context, providing detailed semantic mappings, cultural significance, and archetypal connections while respecting cultural sovereignty principles."
+
+  /logging/setLevel:
+    post:
+      tags: [logging]
+      summary: Set logging level
+      description: Configure the server's logging level for debugging
+      operationId: setLogLevel
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SetLogLevelRequest'
+            example:
+              jsonrpc: "2.0"
+              id: 8
+              method: "logging/setLevel"
+              params:
+                level: "DEBUG"
+      responses:
+        '200':
+          description: Logging level set successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SetLogLevelResponse'
+              example:
+                jsonrpc: "2.0"
+                id: 8
+                result: {}
+
+  /security/ssl-info:
+    get:
+      tags: [security]
+      summary: Get SSL/TLS configuration information
+      description: Retrieve current SSL/TLS configuration and certificate details for HTTPS transport
+      operationId: getSSLInfo
+      responses:
+        '200':
+          description: SSL/TLS configuration information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SSLInfoResponse'
+              example:
+                protocol_version: "TLSv1.3"
+                cipher_suite: "TLS_AES_256_GCM_SHA384"
+                certificate_subject: "CN=localhost,O=SIRAJ Team,OU=MCP Server"
+                certificate_expires: "2025-08-28T10:30:00Z"
+                verification_mode: "required"
+        '503':
+          description: SSL not configured or HTTPS transport not active
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "SSL/TLS not configured - server running on stdio or sse transport"
+
+components:
+  schemas:
+    # Base JSON-RPC schemas
+    JSONRPCRequest:
+      type: object
+      required: [jsonrpc, id, method]
+      properties:
+        jsonrpc:
+          type: string
+          enum: ["2.0"]
+        id:
+          oneOf:
+            - type: string
+            - type: number
+        method:
+          type: string
+        params:
+          type: object
+
+    JSONRPCResponse:
+      type: object
+      required: [jsonrpc, id]
+      properties:
+        jsonrpc:
+          type: string
+          enum: ["2.0"]
+        id:
+          oneOf:
+            - type: string
+            - type: number
+        result:
+          type: object
+        error:
+          $ref: '#/components/schemas/JSONRPCError'
+
+    JSONRPCError:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
+        data:
+          type: object
+
+    # MCP Core schemas
+    ClientCapabilities:
+      type: object
+      properties:
+        experimental:
+          type: object
+        sampling:
+          type: object
+
+    ServerCapabilities:
+      type: object
+      properties:
+        tools:
+          type: object
+          properties:
+            listChanged:
+              type: boolean
+        resources:
+          type: object
+          properties:
+            subscribe:
+              type: boolean
+            listChanged:
+              type: boolean
+        prompts:
+          type: object
+          properties:
+            listChanged:
+              type: boolean
+        logging:
+          type: object
+
+    ClientInfo:
+      type: object
+      required: [name, version]
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+
+    ServerInfo:
+      type: object
+      required: [name, version]
+      properties:
+        name:
+          type: string
+        version:
+          type: string
+        description:
+          type: string
+
+    # Tool schemas
+    Tool:
+      type: object
+      required: [name, description, inputSchema]
+      properties:
+        name:
+          type: string
+          description: "Unique identifier for the tool"
+        description:
+          type: string
+          description: "Human-readable description of what the tool does"
+        inputSchema:
+          type: object
+          description: "JSON Schema defining the tool's input parameters"
+
+    ToolResult:
+      type: object
+      required: [content]
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/TextContent'
+        isError:
+          type: boolean
+          default: false
+
+    TextContent:
+      type: object
+      required: [type, text]
+      properties:
+        type:
+          type: string
+          enum: ["text"]
+        text:
+          type: string
+
+    # Resource schemas
+    Resource:
+      type: object
+      required: [uri, name]
+      properties:
+        uri:
+          type: string
+          description: "Unique identifier for the resource"
+        name:
+          type: string
+          description: "Human-readable name"
+        description:
+          type: string
+          description: "Description of the resource"
+        mimeType:
+          type: string
+          description: "MIME type of the resource content"
+
+    ResourceContents:
+      type: object
+      required: [uri, mimeType]
+      properties:
+        uri:
+          type: string
+        mimeType:
+          type: string
+        text:
+          type: string
+        blob:
+          type: string
+          format: base64
+
+    # Prompt schemas
+    Prompt:
+      type: object
+      required: [name, description]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        arguments:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptArgument'
+
+    PromptArgument:
+      type: object
+      required: [name, description]
+      properties:
+        name:
+          type: string
+        description:
+          type: string
+        required:
+          type: boolean
+          default: false
+
+    PromptMessage:
+      type: object
+      required: [role, content]
+      properties:
+        role:
+          type: string
+          enum: ["user", "assistant"]
+        content:
+          $ref: '#/components/schemas/TextContent'
+
+    GetPromptResult:
+      type: object
+      properties:
+        description:
+          type: string
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/PromptMessage'
+
+    # Request/Response schemas
+    InitializeRequest:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCRequest'
+        - type: object
+          properties:
+            method:
+              enum: ["initialize"]
+            params:
+              type: object
+              required: [protocolVersion, capabilities, clientInfo]
+              properties:
+                protocolVersion:
+                  type: string
+                capabilities:
+                  $ref: '#/components/schemas/ClientCapabilities'
+                clientInfo:
+                  $ref: '#/components/schemas/ClientInfo'
+
+    InitializeResponse:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCResponse'
+        - type: object
+          properties:
+            result:
+              type: object
+              required: [protocolVersion, capabilities, serverInfo]
+              properties:
+                protocolVersion:
+                  type: string
+                capabilities:
+                  $ref: '#/components/schemas/ServerCapabilities'
+                serverInfo:
+                  $ref: '#/components/schemas/ServerInfo'
+
+    ListToolsRequest:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCRequest'
+        - type: object
+          properties:
+            method:
+              enum: ["tools/list"]
+
+    ListToolsResponse:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCResponse'
+        - type: object
+          properties:
+            result:
+              type: object
+              required: [tools]
+              properties:
+                tools:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Tool'
+
+    CallToolRequest:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCRequest'
+        - type: object
+          properties:
+            method:
+              enum: ["tools/call"]
+            params:
+              type: object
+              required: [name, arguments]
+              properties:
+                name:
+                  type: string
+                arguments:
+                  type: object
+
+    CallToolResponse:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCResponse'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/ToolResult'
+
+    ListResourcesRequest:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCRequest'
+        - type: object
+          properties:
+            method:
+              enum: ["resources/list"]
+
+    ListResourcesResponse:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCResponse'
+        - type: object
+          properties:
+            result:
+              type: object
+              required: [resources]
+              properties:
+                resources:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Resource'
+
+    ReadResourceRequest:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCRequest'
+        - type: object
+          properties:
+            method:
+              enum: ["resources/read"]
+            params:
+              type: object
+              required: [uri]
+              properties:
+                uri:
+                  type: string
+
+    ReadResourceResponse:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCResponse'
+        - type: object
+          properties:
+            result:
+              type: object
+              required: [contents]
+              properties:
+                contents:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/ResourceContents'
+
+    ListPromptsRequest:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCRequest'
+        - type: object
+          properties:
+            method:
+              enum: ["prompts/list"]
+
+    ListPromptsResponse:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCResponse'
+        - type: object
+          properties:
+            result:
+              type: object
+              required: [prompts]
+              properties:
+                prompts:
+                  type: array
+                  items:
+                    $ref: '#/components/schemas/Prompt'
+
+    GetPromptRequest:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCRequest'
+        - type: object
+          properties:
+            method:
+              enum: ["prompts/get"]
+            params:
+              type: object
+              required: [name]
+              properties:
+                name:
+                  type: string
+                arguments:
+                  type: object
+
+    GetPromptResponse:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCResponse'
+        - type: object
+          properties:
+            result:
+              $ref: '#/components/schemas/GetPromptResult'
+
+    SetLogLevelRequest:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCRequest'
+        - type: object
+          properties:
+            method:
+              enum: ["logging/setLevel"]
+            params:
+              type: object
+              required: [level]
+              properties:
+                level:
+                  type: string
+                  enum: ["DEBUG", "INFO", "WARNING", "ERROR"]
+
+    SetLogLevelResponse:
+      allOf:
+        - $ref: '#/components/schemas/JSONRPCResponse'
+        - type: object
+          properties:
+            result:
+              type: object
+
+    # SSL/TLS Security schemas
+    SSLInfoResponse:
+      type: object
+      properties:
+        protocol_version:
+          type: string
+          enum: ["TLSv1.2", "TLSv1.3"]
+          description: "Active SSL/TLS protocol version"
+        cipher_suite:
+          type: string
+          description: "Current cipher suite being used"
+        certificate_subject:
+          type: string
+          description: "SSL certificate subject information"
+        certificate_expires:
+          type: string
+          format: date-time
+          description: "Certificate expiration date"
+        certificate_issuer:
+          type: string
+          description: "Certificate issuer information"
+        verification_mode:
+          type: string
+          enum: ["none", "optional", "required"]
+          description: "SSL certificate verification mode"
+        ca_certificates:
+          type: array
+          items:
+            type: string
+          description: "List of trusted CA certificate subjects"
+
+    SSLConfiguration:
+      type: object
+      properties:
+        enabled:
+          type: boolean
+          description: "Whether SSL/TLS is enabled"
+        cert_file:
+          type: string
+          description: "Path to SSL certificate file"
+        key_file:
+          type: string
+          description: "Path to SSL private key file"
+        ca_file:
+          type: string
+          description: "Path to CA certificate file"
+        verify_mode:
+          type: string
+          enum: ["none", "optional", "required"]
+          default: "required"
+          description: "SSL certificate verification mode"
+        protocol_version:
+          type: string
+          enum: ["TLSv1.2", "TLSv1.3"]
+          default: "TLSv1.3"
+          description: "Minimum SSL/TLS protocol version"
+        cipher_suites:
+          type: array
+          items:
+            type: string
+          description: "Allowed cipher suites (optional)"
+        dhparam_file:
+          type: string
+          description: "Path to Diffie-Hellman parameters file (optional)"
+
+externalDocs:
+  description: Model Context Protocol Specification
+  url: https://modelcontextprotocol.io/specification/2025-06-18

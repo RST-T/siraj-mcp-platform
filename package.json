@@ -1,0 +1,98 @@
+{
+  "name": "@siraj-team/mcp-server-computational-hermeneutics",
+  "version": "6.1.0",
+  "description": "SIRAJ v6.1 Computational Hermeneutics MCP Server - Advanced linguistic analysis with cultural sovereignty protection",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "siraj-mcp-server": "dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsx src/index.ts",
+    "start": "node dist/index.js",
+    "prepare": "npm run build",
+    "test": "jest",
+    "lint": "eslint src --ext .ts",
+    "format": "prettier --write src/**/*.ts",
+    "install-deps": "python -m pip install -r requirements.txt",
+    "setup": "npm run install-deps && npm run build",
+    "health-check": "node dist/index.js health",
+    "postinstall": "echo \"\\n📋 SIRAJ MCP Server installed!\\nRun 'siraj-mcp-server health' to check dependencies\\nRun 'siraj-mcp-server generate-config' for Claude Desktop integration\\n\""
+  },
+  "keywords": [
+    "mcp",
+    "mcp-server", 
+    "computational-hermeneutics",
+    "linguistics",
+    "semantic-analysis",
+    "cultural-sovereignty",
+    "arabic",
+    "semitic-languages",
+    "claude",
+    "ai",
+    "nlp"
+  ],
+  "author": {
+    "name": "SIRAJ Team",
+    "email": "siraj@linguistics.org",
+    "url": "https://github.com/siraj-team/siraj-mcp"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/siraj-team/siraj-mcp#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/siraj-team/siraj-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/siraj-team/siraj-mcp/issues"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0",
+    "@types/node": "^20.0.0",
+    "commander": "^11.0.0",
+    "dotenv": "^16.0.0",
+    "zod": "^3.22.0",
+    "execa": "^8.0.0",
+    "chalk": "^5.0.0"
+  },
+  "devDependencies": {
+    "@types/jest": "^29.0.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "eslint": "^8.0.0",
+    "jest": "^29.0.0",
+    "prettier": "^3.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.0.0"
+  },
+  "files": [
+    "dist/",
+    "README.md",
+    "LICENSE",
+    "python-server/"
+  ],
+  "mcp": {
+    "server": {
+      "name": "siraj-computational-hermeneutics",
+      "description": "Advanced computational hermeneutics with cultural sovereignty protection",
+      "version": "6.1.0",
+      "capabilities": [
+        "tools",
+        "resources",
+        "prompts"
+      ],
+      "transport": [
+        "stdio",
+        "sse"
+      ]
+    }
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
+}
