@@ -299,24 +299,15 @@ class AdaptiveSemanticArchitecture:
         for node_def in tier_1_definitions:
             node = SemanticNode(
                 node_id=node_def["node_id"],
-                tier_level=1,
-                universal_function=node_def["universal_function"],
-                traditional_roots=node_def["traditional_roots"],
-                computational_features=node_def["computational_features"],
-                cultural_mappings=node_def["cultural_mappings"],
-                community_validation={
-                    "status": "validated",
-                    "confidence": 0.94,
-                    "validating_communities": ["islamic_scholars", "comparative_linguists", "indigenous_councils"],
-                    "last_validated": datetime.now().isoformat()
-                },
-                adaptive_properties={
-                    "adaptable": False,  # Tier 1 nodes are stable
-                    "core_universal": True
-                }
+                tier=ArchetypalTier.CORE_PRIMITIVES,
+                name=node_def["universal_function"],
+                proto_semitic_root=node_def["traditional_roots"]["proto_semitic"],
+                computational_function=f"Core universal semantic primitive for {node_def['universal_function']}",
+                linguistic_application=f"Cross-linguistic {node_def['universal_function']} pattern recognition",
+                confidence=0.94
             )
             self.tier_1_nodes[node.node_id] = node
-            self.node_relationships.add_node(node.node_id, tier=1, function=node.universal_function)
+            self.node_relationships.add_node(node.node_id, tier=1, function=node.name)
         
         logger.info(f"Initialized {len(self.tier_1_nodes)} Tier 1 universal nodes")
     
@@ -338,14 +329,15 @@ class AdaptiveSemanticArchitecture:
         for node_def in tier_2_definitions:
             node = SemanticNode(
                 node_id=node_def["node_id"],
-                tier_level=2,
-                universal_function=node_def["function"],
-                computational_features=node_def["features"],
-                community_validation={"status": "pending"},
-                adaptive_properties={"adaptable": True}
+                tier=ArchetypalTier.BASIC_FORCES,
+                name=node_def["function"],
+                proto_semitic_root="adaptive",  # Tier 2 nodes are adaptive/derived
+                computational_function=f"Adaptive semantic interface for {node_def['function']}",
+                linguistic_application=f"Cultural-computational bridge for {node_def['function']}",
+                confidence=0.85
             )
             self.tier_2_nodes[node.node_id] = node
-            self.node_relationships.add_node(node.node_id, tier=2, function=node.universal_function)
+            self.node_relationships.add_node(node.node_id, tier=2, function=node.name)
         
         logger.info(f"Initialized {len(self.tier_2_nodes)} Tier 2 interface nodes")
     

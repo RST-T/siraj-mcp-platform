@@ -47,7 +47,7 @@ app.add_middleware(
 )
 
 # Database setup
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://siraj:siraj@localhost:5432/siraj_platform")
+DATABASE_URL = os.getenv("DATABASE_URL", os.getenv("SIRAJ_CORPUS_DATABASE_URL", "postgresql://neondb_owner:npg_npWHsoRb5f6v@ep-icy-wave-a8h14f5w-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require"))
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()

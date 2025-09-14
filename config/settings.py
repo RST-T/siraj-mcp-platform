@@ -68,7 +68,7 @@ class SirajMCPSettings(BaseSettings):
     
     # Database Configuration
     corpus_database_url: str = Field(
-        default="postgresql://siraj:siraj@localhost:5432/siraj_corpus",
+        default="postgresql://neondb_owner:npg_npWHsoRb5f6v@ep-icy-wave-a8h14f5w-pooler.eastus2.azure.neon.tech/neondb?sslmode=require&channel_binding=require",
         description="Corpus database URL"
     )
     lexicon_database_url: str = Field(
